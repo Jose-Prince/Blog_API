@@ -1,4 +1,4 @@
-const { Pool } = require('pg');
+const { Pool } = require('pg')
 
 const pool = new Pool({
   user: 'postgres',
@@ -6,8 +6,8 @@ const pool = new Pool({
   database: 'blog',
   password: 'JAPM102003',
   port: 5433, // Puerto correspondiente al contenedor Docker
-});
+})
 
 module.exports = {
   query: (text, params) => pool.query(text, params),
-};
+}
