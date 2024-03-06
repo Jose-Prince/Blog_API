@@ -4,7 +4,8 @@
   "description": "API para blog de web",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"node main.js\" \"docker start movies-blog-container\""
   },
   "repository": {
     "type": "git",
@@ -25,5 +26,11 @@
     "express": "^4.18.3",
     "nodemon": "^3.1.0",
     "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1"
   }
 }

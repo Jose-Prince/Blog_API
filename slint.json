@@ -1,0 +1,24 @@
+[
+    {
+        "tool": "jshint",
+        "files": ["./frontend-code/**/*.js", "!3rdparty"],
+        "config": "./misc/jshint-frontend.conf"
+    },
+    {
+        "tool": "jshint",
+        "files": ["lib/**.js", "test/**.js" ],
+        "config": "./misc/jshint-nodejs.conf"
+    },
+    {
+        "tool": "trailing-spaces",
+        "files": ["**", "!node_modules", "!3rdparty"]
+    },
+    {
+        "tool": "json",
+        "files": ["**/*.json", "!node_modules", "!3rdparty"],
+        "config": {
+            "indent": "  ",     
+            "canonical": false  
+        }
+    }
+]
