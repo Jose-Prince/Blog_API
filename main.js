@@ -21,12 +21,12 @@ app.get('/posts', async (req, res) => {
     const posts = await queries.getAllPosts()
     res.json(posts)
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    res.status(500).json({ error: 'Error interno del servidor' })
   }
 })
 
 app.get('/posts/:postId', async (req, res) => {
-  const { postId } = req.body
+  const { postId } = req.params
   try {
     const post = await queries.getPost(postId)
     if (post) {
@@ -35,51 +35,72 @@ app.get('/posts/:postId', async (req, res) => {
       res.status(404).json({ error: 'Post no encontrado' })
     }
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    res.status(500).json({ error: 'Error interno del servidor' })
   }
 })
 
 // Ruta para crear un nuevo post
 app.post('/posts', async (req, res) => {
   const { id, name, date } = req.body
-  try {
-    await queries.createPost(id, name, date)
-
-    const newPost = await queries.getPost(id)
-
-    res.status(200).json({ message: 'Post creado exitosamente', post: newPost })
-  } catch (err) {
-    res.status(500).json({ error: err.message })
+  if (!id || !name || !date) {
+    res.status(400).json({ error: 'Datos incompletos en el cuerpo de la solicitud' })
+  } else {
+    try {
+      await queries.createPost(id, name, date)
+      const newPost = await queries.getPost(id)
+      res.status(201).json({ message: 'Post creado exitosamente', post: newPost })
+    } catch (err) {
+      res.status(500).json({ error: 'Error interno del servidor' })
+    }
   }
 })
 
 app.put('/posts/:postId', async (req, res) => {
-  try {
-    const { postId, newContent } = req.body
-
-    await queries.modifyContent(postId, newContent)
-
-    const post = await queries.getPost(postId)
-    if (post) {
-      res.status(200).json(post)
-    } else {
-      res.status(404).json({ error: 'Post no encontrado' })
+  const { postId, newContent } = req.body
+  if (!postId || !newContent) {
+    res.status(400).json({ error: 'Datos incompletos en el cuerpo de la solicitud' })
+  } else {
+    try {
+      await queries.modifyContent(postId, newContent)
+      const post = await queries.getPost(postId)
+      if (post) {
+        res.status(200).json(post)
+      } else {
+        res.status(404).json({ error: 'Post no encontrado' })
+      }
+    } catch (err) {
+      res.status(500).json({ error: 'Error interno del servidor' })
     }
-  } catch (err) {
-    res.status(500).json({ error: err.message })
   }
 })
 
 app.delete('/posts/:postId', async (req, res) => {
+  const { postId } = req.params
   try {
-    const { postId } = req.body
-
     await queries.deletePost(postId)
-
     res.status(204).send()
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    res.status(500).json({ error: 'Error interno del servidor' })
   }
+})
+
+// Middleware para manejar endpoints no existentes
+app.use((req, res) => {
+  res.status(404).json({ error: 'Endpoint no encontrado' })
+})
+
+// Middleware para manejar errores de formato incorrecto en el cuerpo de la solicitud
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    res.status(400).json({ error: 'Formato incorrecto en el cuerpo de la solicitud' })
+  } else {
+    next()
+  }
+})
+
+// Middleware para manejar métodos HTTP no implementados
+app.use((req, res) => {
+  res.status(501).json({ error: 'Método HTTP no implementado' })
 })
 
 // Iniciar el servidor
