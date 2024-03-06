@@ -5,6 +5,7 @@ const queries = require('./db');
 const app = express();
 const port = 3000;
 
+
 // Configuración de CORS
 app.use(cors());
 
