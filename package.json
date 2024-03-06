@@ -1,0 +1,29 @@
+{
+  "name": "blog_api",
+  "version": "1.0.0",
+  "description": "API para blog de web",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jose-Prince/Blog_API.git"
+  },
+  "keywords": [
+    "API"
+  ],
+  "author": "Jose Prince",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jose-Prince/Blog_API/issues"
+  },
+  "homepage": "https://github.com/Jose-Prince/Blog_API#readme",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "nodemon": "^3.1.0",
+    "pg": "^8.11.3"
+  }
+}
