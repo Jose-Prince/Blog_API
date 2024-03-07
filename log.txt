@@ -92,3 +92,23 @@
   {"postId":1,"newContent":"testing..."} - Response: 200
 2024-03-07T05:31:19.876Z: PUT /posts/1 - Payload: 
   {"postId":1,"newContent":"testing.."} - Response: 200
+2024-03-07T06:15:53.153Z: GET /posts - Payload: 
+  {"newContent":"testing..."} - Response: 200
+2024-03-07T06:16:01.590Z: GET /posts/1 - Payload: 
+  {"newContent":"testing..."} - Response: 200
+2024-03-07T06:16:07.243Z: PUT /posts/1 - Payload: 
+  {"newContent":"testing..."} - Response: 200
+2024-03-07T06:16:39.632Z: PUT /posts/1 - Payload: 
+  {"postId":1,"newContent":"testing.."} - Response: 200
+2024-03-07T06:17:09.310Z: PUT /posts/1 - Payload: 
+  {"newContent":"testing.."} - Response: 200
+2024-03-07T06:17:16.800Z: GET /posts/1 - Payload: 
+  {"newContent":"testing.."} - Response: 200
+2024-03-07T06:17:26.150Z: PUT /posts/1 - Payload: 
+  {"newContent":"testing.."} - Response: 200
+2024-03-07T06:18:59.169Z: PUT /posts/1 - Payload: 
+  {"newContent":"testing.."} - Response: 200
+2024-03-07T06:19:43.430Z: PUT /posts/1 - Payload: 
+  {"newContent":"testing.."} - Response: 200
+2024-03-07T06:19:48.176Z: PUT /posts/1 - Payload: 
+  {"newContent":"testing..."} - Response: 200

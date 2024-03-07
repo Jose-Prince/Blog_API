@@ -69,9 +69,9 @@ app.post('/posts', async (req, res) => {
 })
 
 app.put('/posts/:postId', async (req, res) => {
-  const { postId } = req.params.postId
+  const { postId } = req.params
   const { newContent } = req.body
-  if (!postId || !newContent) {
+  if (!newContent) {
     res.status(400).json({ error: 'Datos incompletos en el cuerpo de la solicitud' })
   } else {
     try {
