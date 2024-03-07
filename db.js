@@ -1,29 +1,28 @@
 const conn = require('./connection')
 
-const insertPost = async (id, name, date) => {
+const insertPost = async (name, date) => {
   try {
-    await conn.query('INSERT INTO Post (id, name, date) VALUES ($1, $2, $3)', [id, name, date])
+    await conn.query('INSERT INTO Post (name, date) VALUES ($1, $2)', [name, date])
   } catch (err) {
     throw new Error('Error interno del servidor')
   }
 }
 
-const insertContent = async (id, name) => {
+const insertContent = async (postId, content) => {
   try {
-    await conn.query('INSERT INTO Content (id, text) VALUES ($1, $2)', [id, name])
+    await conn.query('INSERT INTO Content (id, text) VALUES ($1, $2)', [postId, content])
   } catch (err) {
-    throw new Error('Error interno del servidor')
+    throw new Error('Error al insertar en la tabla Content')
   }
 }
 
-const insertDecoration = async (id, name) => {
+const insertDecoration = async (postId, archive) => {
   try {
-    await conn.query('INSERT INTO Decoration (id, archive) VALUES ($1, $2)', [id, name])
+    await conn.query('INSERT INTO Decoration (id, archive) VALUES ($1, $2)', [postId, archive])
   } catch (err) {
-    throw new Error('Error interno del servidor')
+    throw new Error('Error al insertar en la tabla Decoration')
   }
 }
-
 const getAllPosts = async () => {
   try {
     const result = await conn.query(
@@ -78,13 +77,18 @@ const deletePost = async (postId) => {
   }
 }
 
-const createPost = async (id, name, date) => {
+const createPost = async (name, date, content, archive) => {
   try {
-    await insertPost(id, name, date)
-    await insertContent(id, name)
-    await insertDecoration(id, name)
+    // Insertar primero en la tabla Post para obtener el ID generado automáticamente
+    await insertPost(name, date)
+    // Obtener el ID del último post insertado
+    const { rows } = await conn.query('SELECT id FROM Post ORDER BY id DESC LIMIT 1')
+    const postId = rows[0].id
+    // Insertar en las tablas Content y Decoration utilizando el ID obtenido anteriormente
+    await insertContent(postId, content)
+    await insertDecoration(postId, archive)
   } catch (err) {
-    throw new Error('Error interno del servidor')
+    throw new Error('Error al crear un nuevo post')
   }
 }
 

@@ -57,22 +57,20 @@ app.get('/posts/:postId', async (req, res) => {
 
 // Ruta para crear un nuevo post
 app.post('/posts', async (req, res) => {
-  const { id, name, date } = req.body
-  if (!id || !name || !date) {
+  const {
+    name, date, content, archive,
+  } = req.body
+  if (!name || !date || !content || !archive) {
     res.status(400).json({ error: 'Datos incompletos en el cuerpo de la solicitud' })
   } else {
-    try {
-      await queries.createPost(id, name, date)
-      const newPost = await queries.getPost(id)
-      res.status(201).json({ message: 'Post creado exitosamente', post: newPost })
-    } catch (err) {
-      res.status(500).json({ error: 'Error interno del servidor' })
-    }
+    await queries.createPost(name, date, content, archive)
+    res.status(200).json({ message: 'Post creado exitosamente' }) // Aquí se ha corregido para devolver solo el mensaje
   }
 })
 
 app.put('/posts/:postId', async (req, res) => {
-  const { postId, newContent } = req.body
+  const { postId } = req.params.postId
+  const { newContent } = req.body
   if (!postId || !newContent) {
     res.status(400).json({ error: 'Datos incompletos en el cuerpo de la solicitud' })
   } else {
