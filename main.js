@@ -1,5 +1,7 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
+const fs = require('fs')
 const queries = require('./db')
 
 const app = express()
@@ -10,6 +12,20 @@ app.use(cors())
 
 // Configuración de Express para analizar el cuerpo de la solicitud en formato JSON
 app.use(express.json())
+
+app.use((req, res, next) => {
+  const timestamp = new Date().toISOString()
+
+  const logMessage = `${timestamp}: ${req.method} ${req.originalUrl} - Payload: 
+  ${JSON.stringify(req.body)} - Response: ${res.statusCode}\n`
+
+  fs.appendFile(path.join(__dirname, 'log.txt'), logMessage, (err) => {
+    if (err) {
+      res.status(500).json({ error: 'Error interno del servidor' })
+    }
+  })
+  next()
+})
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

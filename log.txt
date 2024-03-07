@@ -1,0 +1,4 @@
+2024-03-06T23:27:24.676Z: POST /posts - Payload: 
+  {"id":"1"} - Response: 200
+2024-03-06T23:27:32.623Z: GET /posts - Payload: 
+  {"id":"1"} - Response: 200
