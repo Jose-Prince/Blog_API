@@ -33,14 +33,24 @@ La API proporciona los siguientes endpoints:
 - `POST /posts`: Crea una nueva publicación.
 
 Formato de body:
+```
+{
+    "name": "Titulo del post",
+    "date": "yyyy-mm-dd",
+    "content": "Contenido",
+    "archive": "Imagen"
+}
+```
 
 - `PUT /posts/:postId`: Actualiza el contenido de una publicación existente.\n
 
 Formato de body:
-
+```
+{
+    "newContent": "Nuevo contenido"
+}
+```
 - `DELETE /posts/:postId`: Elimina una publicación exitente.
-
-Formato de body:
 
 ## Contribuciones
 Las contribuciones son bienvenidas. Si encuentras un error o tienes una sugerencia de mejora, por favor crea una issue o envía un pull request.
