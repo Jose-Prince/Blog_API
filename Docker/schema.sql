@@ -1,16 +1,20 @@
-CREATE TABLE IF NOT EXISTS Post(
+CREATE TABLE IF NOT EXISTS Movies(
 id VARCHAR(3) PRIMARY KEY,
-name VARCHAR(255),
-date TIMESTAMP
+title VARCHAR(255),
+trailer TEXT,
+image TEXT,
+content TEXT,
+date DATE
 )
 
-CREATE TABLE IF NOT EXISTS Content(
+CREATE TABLE IF NOT EXISTS Colors(
 id VARCHAR(3) references Post(id), 
-text TEXT PRIMARY KEY
-
+type VARCHAR(20),
+hexadecimal VARCHAR(7) 
 )
 
-CREATE TABLE IF NOT EXISTS Decoration(
+CREATE TABLE IF NOT EXISTS People(
 id VARCHAR(3) references Post(id),
-archive TEXT PRIMARY KEY
+name VARCHAR(255),
+role VARCHAR(255)
 )

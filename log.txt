@@ -112,3 +112,5 @@
   {"newContent":"testing.."} - Response: 200
 2024-03-07T06:19:48.176Z: PUT /posts/1 - Payload: 
   {"newContent":"testing..."} - Response: 200
+2024-03-19T16:00:53.462Z: GET /posts/1 - Payload: 
+  {"newContent":"testing..."} - Response: 200
