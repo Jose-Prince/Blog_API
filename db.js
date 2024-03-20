@@ -26,9 +26,7 @@ const insertDecoration = async (postId, archive) => {
 const getAllPosts = async () => {
   try {
     const result = await conn.query(
-      `SELECT Post.id, name, date, text, archive FROM Post
-      JOIN content ON content.id = Post.id
-      JOIN decoration ON decoration.id = Post.id`,
+      `SELECT * FROM Movies`,
     )
     return result.rows
   } catch (err) {
@@ -38,10 +36,8 @@ const getAllPosts = async () => {
 
 const getPost = async (postId) => {
   try {
-    const result = await conn.query(`SELECT Post.id, name, date, text, archive FROM Post
-        JOIN content ON content.id = Post.id
-        JOIN decoration ON decoration.id = Post.id
-        WHERE post.id = $1
+    const result = await conn.query(`SELECT title, content FROM Movies
+        WHERE id = $1
     `, [postId])
     return result.rows[0]
   } catch (err) {

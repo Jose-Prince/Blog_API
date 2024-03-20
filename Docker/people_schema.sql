@@ -1,0 +1,6 @@
+
+CREATE TABLE IF NOT EXISTS People(
+movie_id VARCHAR(3),
+name VARCHAR(255),
+role VARCHAR(255)
+)
