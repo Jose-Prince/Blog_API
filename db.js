@@ -1,6 +1,6 @@
 const conn = require('./connection')
 
-const insertPost = async (name, date) => {
+const insertBlog = async (name, date) => {
   try {
     await conn.query('INSERT INTO Post (name, date) VALUES ($1, $2)', [name, date])
   } catch (err) {
@@ -73,16 +73,10 @@ const deletePost = async (postId) => {
   }
 }
 
-const createPost = async (name, date, content, archive) => {
+const createPost = async (id , title, trailer, image, content, date) => {
   try {
     // Insertar primero en la tabla Post para obtener el ID generado automáticamente
-    await insertPost(name, date)
-    // Obtener el ID del último post insertado
-    const { rows } = await conn.query('SELECT id FROM Post ORDER BY id DESC LIMIT 1')
-    const postId = rows[0].id
-    // Insertar en las tablas Content y Decoration utilizando el ID obtenido anteriormente
-    await insertContent(postId, content)
-    await insertDecoration(postId, archive)
+    await conn.query('INSERT INTO Movies (id, title, trailer, image, content, date) VALUES ($1, $2, $3, $4, $5, $6)', [id , title, trailer, image, content, date])
   } catch (err) {
     throw new Error('Error al crear un nuevo post')
   }

@@ -58,12 +58,12 @@ app.get('/posts/:postId', async (req, res) => {
 // Ruta para crear un nuevo post
 app.post('/posts', async (req, res) => {
   const {
-    name, date, content, archive,
+    id, title, trailer, image, content, date
   } = req.body
-  if (!name || !date || !content || !archive) {
+  if (!id || !title || !content || !trailer || !image || !date) {
     res.status(400).json({ error: 'Datos incompletos en el cuerpo de la solicitud' })
   } else {
-    await queries.createPost(name, date, content, archive)
+    await queries.createPost(id , title, trailer, image, content, date)
     res.status(200).json({ message: 'Post creado exitosamente' }) // Aquí se ha corregido para devolver solo el mensaje
   }
 })
