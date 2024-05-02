@@ -5,7 +5,7 @@ const fs = require('fs')
 const queries = require('./db')
 
 const app = express()
-const port = 3000
+const port = 4500
 
 // Configuración de CORS
 app.use(cors())
@@ -41,6 +41,16 @@ app.get('/posts', async (req, res) => {
   }
 })
 
+app.get('/admin', async (req, res) => {
+  try {
+    const admin = await queries.getAdmin()
+    res.json(admin)
+  } catch (err) {
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
+})
+
+//Ruta para obtener un post por su id
 app.get('/posts/:postId', async (req, res) => {
   const { postId } = req.params
   try {
@@ -55,27 +65,55 @@ app.get('/posts/:postId', async (req, res) => {
   }
 })
 
+app.get('/people/:id', async (req, res) => {
+  const { id } = req.params
+  try {
+    const person = await queries.getPeopleMovie(id)
+    if (person) {
+      res.status(200).json(person)
+    } else {
+      res.status(404).json({ error: 'Personas no encontradas' })
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
+})
+
 // Ruta para crear un nuevo post
 app.post('/posts', async (req, res) => {
   const {
-    id, title, trailer, image, content, date
+    title, trailer, image, content
   } = req.body
-  if (!id || !title || !content || !trailer || !image || !date) {
+  if (!title || !content || !trailer || !image) {
     res.status(400).json({ error: 'Datos incompletos en el cuerpo de la solicitud' })
   } else {
-    await queries.createPost(id , title, trailer, image, content, date)
+    await queries.createPost(title, trailer, image, content)
     res.status(200).json({ message: 'Post creado exitosamente' }) // Aquí se ha corregido para devolver solo el mensaje
   }
 })
 
+//Ruta para añadir persona a una pelicula
+app.post('/people', async (req, res) => {
+  const {
+    name, role, id, picture
+  } = req.body
+  if (!name || !role || !id || !picture) {
+    res.status(400).json({ error: 'Datos incompletos en el cuerpo de la solicitud' })
+  } else {
+    await queries.createPeople(name, role, id, picture)
+    res.status(200).json({ message: 'Persona añadida exitosamente' })
+  }
+})
+
+//Ruta para modificar un post
 app.put('/posts/:postId', async (req, res) => {
   const { postId } = req.params
-  const { newContent } = req.body
-  if (!newContent) {
+  const { title, trailer, image, music, content } = req.body
+  if (!content || !title || !trailer || !image || !music) {
     res.status(400).json({ error: 'Datos incompletos en el cuerpo de la solicitud' })
   } else {
     try {
-      await queries.modifyContent(postId, newContent)
+      await queries.modifyPost(postId, title, trailer, image, music, content)
       const post = await queries.getPost(postId)
       if (post) {
         res.status(200).json(post)

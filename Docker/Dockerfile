@@ -7,3 +7,5 @@ ENV POSTGRES_PASSWORD=JAPM102003
 COPY movies_schema.sql /docker-entrypoint-initdb.d/
 COPY people_schema.sql /docker-entrypoint-initdb.d/
 COPY colors_schema.sql /docker-entrypoint-initdb.d/
+
+COPY backup.sql /docker-entrypoint-initdb.d/

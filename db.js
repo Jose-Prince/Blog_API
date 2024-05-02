@@ -1,28 +1,5 @@
 const conn = require('./connection')
 
-const insertBlog = async (name, date) => {
-  try {
-    await conn.query('INSERT INTO Post (name, date) VALUES ($1, $2)', [name, date])
-  } catch (err) {
-    throw new Error('Error interno del servidor')
-  }
-}
-
-const insertContent = async (postId, content) => {
-  try {
-    await conn.query('INSERT INTO Content (id, text) VALUES ($1, $2)', [postId, content])
-  } catch (err) {
-    throw new Error('Error al insertar en la tabla Content')
-  }
-}
-
-const insertDecoration = async (postId, archive) => {
-  try {
-    await conn.query('INSERT INTO Decoration (id, archive) VALUES ($1, $2)', [postId, archive])
-  } catch (err) {
-    throw new Error('Error al insertar en la tabla Decoration')
-  }
-}
 const getAllPosts = async () => {
   try {
     const result = await conn.query(
@@ -34,9 +11,20 @@ const getAllPosts = async () => {
   }
 }
 
+const getAdmin = async () => {
+  try {
+    const result = await conn.query(
+      `SELECT * FROM admin`
+    )
+    return result.rows[0]
+  } catch (err) {
+    throw new Error('Error interno del servidor')
+  }
+}
+
 const getPost = async (postId) => {
   try {
-    const result = await conn.query(`SELECT title, content FROM Movies
+    const result = await conn.query(`SELECT id, title, trailer, image, music, content FROM Movies
         WHERE id = $1
     `, [postId])
     return result.rows[0]
@@ -45,12 +33,16 @@ const getPost = async (postId) => {
   }
 }
 
-const modifyContent = async (postId, newContent) => {
+const modifyPost = async (postId, title, trailer, image, music, content) => {
   try {
-    const result = await conn.query(`UPDATE content 
-    SET text = $2
-    WHERE id = $1
-    `, [postId, newContent])
+    const result = await conn.query(`UPDATE movies 
+      SET title = $1,
+      trailer = $2,
+      image = $3,
+      music = $4,
+      content = $5
+      WHERE id = $6
+    `, [title, trailer, image, music, content, postId])
     return result.rows[0]
   } catch (err) {
     throw new Error('Error interno del servidor')
@@ -62,9 +54,7 @@ const deletePost = async (postId) => {
     await conn.query('BEGIN') // Iniciar la transacción
 
     // Ejecutar los comandos de eliminación por separado
-    await conn.query('DELETE FROM content WHERE id = $1', [postId])
-    await conn.query('DELETE FROM decoration WHERE id = $1', [postId])
-    await conn.query('DELETE FROM post WHERE id = $1', [postId])
+    await conn.query('DELETE FROM Movies WHERE id = $1', [postId])
 
     await conn.query('COMMIT') // Confirmar la transacción
   } catch (err) {
@@ -73,12 +63,35 @@ const deletePost = async (postId) => {
   }
 }
 
-const createPost = async (id , title, trailer, image, content, date) => {
+const createPost = async (title, trailer, image, content) => {
   try {
     // Insertar primero en la tabla Post para obtener el ID generado automáticamente
-    await conn.query('INSERT INTO Movies (id, title, trailer, image, content, date) VALUES ($1, $2, $3, $4, $5, $6)', [id , title, trailer, image, content, date])
+    await conn.query('INSERT INTO Movies (title, trailer, image, content) VALUES ($1, $2, $3, $4)', [title, trailer, image, content])
   } catch (err) {
     throw new Error('Error al crear un nuevo post')
+  }
+}
+
+const createPeople = async (name, role, id, picture) => {
+  try {
+    await conn.query(`
+      INSERT INTO People ( name, role, id, picture)
+      VALUES ($1,$2,$3, $4)
+    `, [name, role, id, picture])
+  } catch (err) {
+    throw new Error('Error al añadir una persona')
+  }
+}
+
+const getPeopleMovie = async (id) => {
+  try {
+    const result = await conn.query(
+      `SELECT name, role, picture FROM people
+      WHERE id = $1`, [id]
+    )
+    return result.rows
+  } catch (err) {
+    throw new Error('Error interno del servidor')
   }
 }
 
@@ -86,6 +99,9 @@ module.exports = {
   getAllPosts,
   createPost,
   getPost,
-  modifyContent,
+  modifyPost,
   deletePost,
+  getAdmin,
+  createPeople,
+  getPeopleMovie,
 }
